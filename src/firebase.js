@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, addDoc, getDocs, doc, getDoc, setDoc } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, getDocs, doc, getDoc, setDoc, deleteDoc } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -36,4 +36,26 @@ export async function getEntries() {
   }
 }
 
-export { db, doc, getDoc, setDoc };
+export async function clearResults() {
+  try {
+    await deleteDoc(doc(db, 'config', 'results'));
+    return { success: true };
+  } catch (e) {
+    console.error('Firebase error:', e);
+    return { success: false };
+  }
+}
+
+export async function deleteAllEntries() {
+  try {
+    const snapshot = await getDocs(collection(db, 'entries'));
+    const deletes = snapshot.docs.map(d => deleteDoc(doc(db, 'entries', d.id)));
+    await Promise.all(deletes);
+    return { success: true, count: snapshot.docs.length };
+  } catch (e) {
+    console.error('Firebase error:', e);
+    return { success: false };
+  }
+}
+
+export { db, doc, getDoc, setDoc, deleteDoc };
