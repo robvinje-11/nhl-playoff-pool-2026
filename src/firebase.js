@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, addDoc, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, getDocs, doc, getDoc, setDoc } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -29,11 +29,11 @@ export async function submitEntry(entry) {
 export async function getEntries() {
   try {
     const snapshot = await getDocs(collection(db, 'entries'));
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
   } catch (e) {
     console.error('Firebase error:', e);
     return [];
   }
 }
 
-export { db };
+export { db, doc, getDoc, setDoc };
