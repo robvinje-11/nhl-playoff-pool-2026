@@ -58,4 +58,25 @@ export async function deleteAllEntries() {
   }
 }
 
+export async function getLockStatus() {
+  try {
+    const snap = await getDoc(doc(db, 'config', 'settings'));
+    if (snap.exists()) return snap.data().locked || false;
+    return false;
+  } catch (e) {
+    console.error('Firebase error:', e);
+    return false;
+  }
+}
+
+export async function setLockStatus(locked) {
+  try {
+    await setDoc(doc(db, 'config', 'settings'), { locked }, { merge: true });
+    return { success: true };
+  } catch (e) {
+    console.error('Firebase error:', e);
+    return { success: false };
+  }
+}
+
 export { db, doc, getDoc, setDoc, deleteDoc };
