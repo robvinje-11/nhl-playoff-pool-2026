@@ -80,3 +80,21 @@ export async function setLockStatus(locked) {
 }
 
 export { db, doc, getDoc, setDoc, deleteDoc };
+
+export async function updateEntryName(entryId, firstName, lastName) {
+  try {
+    const ref = doc(db, 'entries', entryId);
+    const snap = await getDoc(ref);
+    if (snap.exists()) {
+      const data = snap.data();
+      data.player.firstName = firstName;
+      data.player.lastName = lastName;
+      await setDoc(ref, data);
+      return { success: true };
+    }
+    return { success: false };
+  } catch (e) {
+    console.error('Firebase error:', e);
+    return { success: false };
+  }
+}
