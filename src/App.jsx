@@ -45,9 +45,13 @@ const[splashDone,setSplashDone]=useState(false);
 const[submitting,setSubmitting]=useState(false);
 const[poolLocked,setPoolLocked]=useState(false);
 const[bracketResults,setBracketResults]=useState(null);
-const isAdmin=(typeof window!=="undefined"&&new URLSearchParams(window.location.search).get("admin")==="true")||isAdminLoggedIn;
+const[isAdminLoggedIn,setIsAdminLoggedIn]=useState(()=>{try{return localStorage.getItem("nhl-admin")==="true";}catch(e){return false;}});
+const[showAdminLogin,setShowAdminLogin]=useState(false);
+const[adminPw,setAdminPw]=useState("");
+
 const isLB=typeof window!=="undefined"&&new URLSearchParams(window.location.search).get("view")==="leaderboard";
 const isPicks=typeof window!=="undefined"&&new URLSearchParams(window.location.search).get("view")==="picks";
+const isAdmin=(typeof window!=="undefined"&&new URLSearchParams(window.location.search).get("admin")==="true")||isAdminLoggedIn;
 const cur=FLOW[step]||null;
 const total=FLOW.length;
 const pct=(step/total)*100;
