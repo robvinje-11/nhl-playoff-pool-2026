@@ -57,7 +57,8 @@ const total=FLOW.length;
 const pct=(step/total)*100;
 
 useEffect(()=>{
-if(isAdmin){setScreen("admin");return;}
+const urlAdmin=typeof window!=="undefined"&&new URLSearchParams(window.location.search).get("admin")==="true";
+if(urlAdmin){setScreen("admin");return;}
 if(isLB){setScreen("leaderboard");return;}
 if(isPicks){setScreen("picks");return;}
 if(screen==="splash"){const t1=setTimeout(()=>setSplashDone(true),3400);const t2=setTimeout(()=>setScreen("bracket"),4200);return()=>{clearTimeout(t1);clearTimeout(t2)};}
